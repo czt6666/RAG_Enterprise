@@ -1,0 +1,13 @@
+[project]
+name = "rag-enterprise"
+version = "0.1.0"
+description = "Add your description here"
+requires-python = ">=3.10"
+dependencies = [
+    "chromadb>=1.1.0",
+    "docx2txt>=0.9",
+    "langchain",
+    "langchain-community>=0.3.29",
+    "pypdf>=6.0.0",
+    "sentence-transformers>=5.1.0",
+]

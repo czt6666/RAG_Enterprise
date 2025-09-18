@@ -1,0 +1,119 @@
+# 流程
+
+## 1. Data Ingestion
+
+`PyPDF2`：适合简单 PDF，速度快，但排版复杂时容易丢格式。
+
+`python-docx`：处理 Word 文档较好，能保留段落，但大文件解析较慢。
+
+`langchain.document_loaders`：支持多种文件格式，能快速转成标准 `Document` 对象。
+
+
+
+进阶（每日更新文档）：使用 Cron（Linux 定时任务工具）执行 Python 脚本，比如每天扫描新文档并导入
+
+
+
+## 2. Chunking
+
+使用 LangChain TextSplitter 进行固定长度+滑动窗口切分
+
+每段 **500 tokens**，重叠 50 tokens
+
+
+
+进阶（语义切分）：暂不考虑
+
+
+
+## 3. Embedding
+
+API 方案
+
+OpenAI `text-embedding-3-small`
+
+- 价格：$0.02 / 百万 tokens
+- 向量维度：1536
+- 速度：单次调用 50~100ms
+- 效果：通用性强，适合大多数中文/英文场景
+
+OpenAI `text-embedding-3-large`
+
+- 价格：$0.13 / 百万 tokens
+- 向量维度：3072
+- 效果更好，但成本更高
+
+
+
+本地模型方案（进阶）
+
+常用模型：`bge-base-zh`（中文）、`m3e-base`（多语言）
+
+效果：在中文专业问答上比 OpenAI 更好
+
+算力：GPU 单卡 8GB 显存 → 可以支撑百万级别文档
+
+
+
+## 4. Vector Store
+
+本地数据库：chromadb
+
+
+
+进阶：
+
+**FAISS**：性能高，C++ 内核，适合实验和中等规模应用；缺点：持久化和多用户支持差
+
+**Milvus**：分布式向量数据库，支持大规模（亿级）数据，企业级性能
+
+
+
+## 5. Retrieval + Reranking
+
+取匹配最佳的前k个（Top-K）
+
+
+
+进阶：
+
+**混合检索**：语义检索 + 关键词（BM25），避免 embedding 偏差
+
+**Reranker**：使用 cross-encoder 模型对候选文档重新打分排序，准确率提升约 10~20%
+
+
+
+## 6. LLM Interface
+
+固定模板拼接prompt
+
+```md
+请根据以下资料回答问题。只使用提供的资料，不要编造。
+资料：
+{retrieved_documents}
+问题：
+{user_query}
+```
+
+
+
+
+
+## 7. API + 前端
+
+使用 `FastAPI` 提供 REST API
+
+使用 `Vue` 搭建聊天界面
+
+
+
+
+
+
+
+
+
+
+
+
+
