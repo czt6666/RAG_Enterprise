@@ -1,4 +1,4 @@
-from chroma_store import ChromaStore
+from rag_core.chroma_store import ChromaStore
 
 class Retriever:
     """
@@ -14,7 +14,7 @@ class Retriever:
 
 # 测试接口
 if __name__ == "__main__":
-    store = ChromaStore()
+    store = ChromaStore(persist_directory="../chroma_db")
     retriever = Retriever(store)
     docs = retriever.retrieve("测试问题")
     for d in docs:

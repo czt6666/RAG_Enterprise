@@ -23,7 +23,7 @@ class TextChunker:
 
 # 测试接口
 if __name__ == "__main__":
-    from doc_loader import DocumentLoader
+    from rag_core.doc_loader import DocumentLoader
     loader = DocumentLoader()
     docs = loader.load_file("example.pdf")
     chunker = TextChunker()

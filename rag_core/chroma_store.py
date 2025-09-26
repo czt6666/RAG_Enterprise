@@ -5,7 +5,8 @@ from typing import List, Optional
 from langchain.docstore.document import Document
 
 # 新版导入
-from langchain_community.vectorstores import Chroma
+# from langchain_community.vectorstores import Chroma
+from langchain_chroma import Chroma
 
 class ChromaStore:
     """
@@ -33,15 +34,22 @@ class ChromaStore:
             persist_directory=self.persist_directory
         )
 
+    def load_store(self, embedder):
+        self.db = Chroma(
+            collection_name=self.collection_name,
+            persist_directory=self.persist_directory,
+            embedding_function=embedder
+        )
+
     def query(self, query_text: str, k=3):
         return self.db.similarity_search(query_text, k=k)
 
 
 # 测试接口
 if __name__ == "__main__":
-    from doc_loader import DocumentLoader
-    from text_splitter import TextChunker
-    from embedder import Embedder
+    from rag_core.doc_loader import DocumentLoader
+    from rag_core.text_splitter import TextChunker
+    from rag_core.embedder import Embedder
 
     loader = DocumentLoader()
     docs = loader.load_file("example.pdf")
@@ -49,7 +57,7 @@ if __name__ == "__main__":
     embedder = Embedder()
     # vectors = embedder.embed_documents([c.page_content for c in chunks])
 
-    store = ChromaStore()
+    store = ChromaStore(persist_directory="../chroma_db")
     store.build_store(chunks, embedder)
     res_docs = store.query("测试问题", k=3)
 
