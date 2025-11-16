@@ -10,6 +10,7 @@ dependencies = [
     "langchain",
     "langchain-chroma>=0.2.6",
     "langchain-community>=0.3.29",
+    "matplotlib>=3.10.7",
     "openai>=1.108.2",
     "pandas>=2.3.2",
     "pypdf>=6.0.0",
